@@ -8,30 +8,26 @@ namespace WorkHoursCalculator
         public Form1()
         {
             InitializeComponent();
-
-
-            // 设置控件格式
+            // 设置开始时间的控件
             dateTimePickerStart.Format = DateTimePickerFormat.Custom;
-            dateTimePickerStart.CustomFormat = "HH:mm";  // 自定义显示为小时:分钟
-            dateTimePickerStart.ShowUpDown = true;       // 启用上下选择模式
+            dateTimePickerStart.CustomFormat = "yyyy-MM-dd HH:mm";  // 自定义显示格式，日期和时间
+            dateTimePickerStart.ShowUpDown = false;  // 默认显示日期和时间，不启用上下选择模式
 
+            // 设置结束时间的控件
             dateTimePickerEnd.Format = DateTimePickerFormat.Custom;
-            dateTimePickerEnd.CustomFormat = "HH:mm";    // 显示为小时:分钟
-            dateTimePickerEnd.ShowUpDown = true;         // 启用上下选择模式
-
-            // 绑定回车键事件
+            dateTimePickerEnd.CustomFormat = "yyyy-MM-dd HH:mm";    // 自定义显示格式，日期和时间
+            dateTimePickerEnd.ShowUpDown = false;  // 默认显示日期和时间，不启用上下选择模式
             txtBreakTime.KeyDown += TxtBreakTime_KeyDown;
         }
         private new AutoAdaptWindowsSize AutoSize;
         private void Form1_Load(object sender, EventArgs e)
         {
-            // 设置窗体的自适应大小
             AutoSize = new AutoAdaptWindowsSize(this);
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
-        {//窗体大小改变事件
-            if (AutoSize != null) // 一定加这个判断，电脑缩放布局不是100%的时候，会报错
+        {
+            if (AutoSize != null) 
             {
                 AutoSize.FormSizeChanged();
             }
@@ -43,23 +39,18 @@ namespace WorkHoursCalculator
         /// <param name="e"></param>
         private void TxtBreakTime_KeyDown(object sender, KeyEventArgs e)
         {
-            // 检查是否按下回车键（Enter）
             if (e.KeyCode == Keys.Enter)
             {
                 try
                 {
-                    // 获取输入的休息时间（单位：小时）
                     double breakTimeInHours = double.Parse(txtBreakTime.Text);
 
-                    // 将休息时间转换为分钟
-                    int breakTimeInMinutes = (int)(breakTimeInHours * 60); // 转换为分钟
+                    int breakTimeInMinutes = (int)(breakTimeInHours * 60); 
 
-                    // 将休息时间重新格式化为小时和分钟
                     int breakHours = breakTimeInMinutes / 60;
                     int breakMinutes = breakTimeInMinutes % 60;
 
-                    // 显示休息时间为 "小时:分钟" 格式
-                    txtBreakTime.Text = $"{breakHours}:{breakMinutes:D2}"; // 以小时:分钟的格式显示
+                    txtBreakTime.Text = $"{breakHours}:{breakMinutes:D2}";
                 }
                 catch (Exception ex)
                 {
@@ -76,13 +67,7 @@ namespace WorkHoursCalculator
                 DateTime startTime = dateTimePickerStart.Value;
                 DateTime endTime = dateTimePickerEnd.Value;
 
-                // 如果休息时间为空，设置为 "0:00" 小时并显示在 TextBox 中
-                if (string.IsNullOrWhiteSpace(txtBreakTime.Text))
-                {
-                    txtBreakTime.Text = "0:00";  // 设置默认值为 0:00 小时
-                }
-
-                // 获取输入的休息时间（单位：小时），例如 1
+                // 获取输入的休息时间（单位：小时）
                 double breakTimeInHours = double.Parse(txtBreakTime.Text.Split(':')[0]);  // 只取小时部分
                 double breakTimeInMinutes = breakTimeInHours * 60;  // 转换为分钟
 
